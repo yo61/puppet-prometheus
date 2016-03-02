@@ -11,14 +11,18 @@ class prometheus::params {
   $package_name = 'prometheus'
   $download_url_base = 'https://github.com/prometheus/prometheus/releases'
   $version = '0.16.2'
-  $exporter_download_url_base = 'https://github.com/prometheus/node_exporter/releases'
-  $exporter_version = '0.11.0'
-  $exporter_collectors = ['diskstats','filesystem','loadavg','meminfo','netdev','stat,time']
+  $download_extension = 'tar.gz'
+  $node_exporter_download_url_base = 'https://github.com/prometheus/node_exporter/releases'
+  $node_exporter_version = '0.11.0'
+  $node_exporter_download_extension = 'tar.gz'
+  $node_exporter_collectors = ['diskstats','filesystem','loadavg','meminfo','netdev','stat,time']
+  $node_exporter_package_ensure = 'latest'
+  $node_exporter_package_name = 'prometheus_node_exporter'
   $alertmanager_url_base = 'https://github.com/prometheus/alertmanager/releases'
   $alertmanager_configpath = '/etc/prometheus/alertmanager.yaml'
   $alertmanager_storagepath='/var/lib/alertmanager'
   $alertmanager_version = '0.1.0'
-  $download_extension = 'tar.gz'
+  $alertmanager_download_extension = 'tar.gz'
   $config_mode = '0660'
   $global_config = { 'scrape_interval'=> '15s', 'evaluation_interval'=> '15s', 'external_labels'=> { 'monitor'=>'master'}}
   $rule_files = [ "${config_dir}/alert.rules" ]
