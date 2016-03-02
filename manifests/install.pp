@@ -51,20 +51,20 @@ class prometheus::install
     }
   }
    if $::prometheus::manage_user {
-    user { $::prometheus::user:
+    ensure_resource('user', [ "$::prometheus::user" ], {
       ensure => 'present',
       system => true,
       groups => $::prometheus::extra_groups,
-    }
+    })
 
     if $::prometheus::manage_group {
       Group[$::prometheus::group] -> User[$::prometheus::user]
     }
   }
   if $::prometheus::manage_group {
-    group { $::prometheus::group:
+    ensure_resource('group', [ "$::prometheus::group" ],{
       ensure => 'present',
       system => true,
-    }
+    })
   }
 }

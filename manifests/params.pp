@@ -17,7 +17,7 @@ class prometheus::params {
   $node_exporter_download_extension = 'tar.gz'
   $node_exporter_collectors = ['diskstats','filesystem','loadavg','meminfo','netdev','stat,time']
   $node_exporter_package_ensure = 'latest'
-  $node_exporter_package_name = 'prometheus_node_exporter'
+  $node_exporter_package_name = 'node_exporter'
   $alertmanager_url_base = 'https://github.com/prometheus/alertmanager/releases'
   $alertmanager_configpath = '/etc/prometheus/alertmanager.yaml'
   $alertmanager_storagepath='/var/lib/alertmanager'

@@ -115,7 +115,7 @@ class prometheus (
   $package_ensure       = $::prometheus::params::package_ensure,
   $config_dir           = $::prometheus::params::config_dir,
   $localstorage         = $::prometheus::params::localstorage,
-  $extra_options        = "-storage.local.path $::prometheus::params::localstorage",
+  $extra_options        = "-storage.local.path=$::prometheus::params::localstorage",
   $config_hash          = {},
   $config_defaults      = {},
   $config_mode          = $::prometheus::params::config_mode,

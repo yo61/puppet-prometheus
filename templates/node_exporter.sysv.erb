@@ -1,33 +1,32 @@
 #!/bin/bash
 #
-#       /etc/rc.d/init.d/prometheus
+#       /etc/rc.d/init.d/node_exporter
 #
-#       Daemonize the prometheus monitoring system.
+#       Daemonize the prometheus node exporter
 #
 # chkconfig:   2345 95 20
-# description:  Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud
-# processname: prometheus
-# pidfile: /var/run/prometheus/pidfile
+# description: Prometheus exporter for machine metrics, written in Go with pluggable metric collectors.
+# processname: node_exporter
+# pidfile: /var/run/node_exporter/pidfile
 
 # Source function library.
 . /etc/init.d/functions
 
-DAEMON=<%= scope.lookupvar('prometheus::bin_dir') %>/prometheus
-CONFIG=<%= scope.lookupvar('prometheus::config_dir')%>/prometheus.yaml
-PID_FILE=/var/run/prometheus/prometheus.pid
-LOG_FILE=/var/log/prometheus
+DAEMON=<%= scope.lookupvar('prometheus::node_exporter::bin_dir') %>/node_exporter
+PID_FILE=/var/run/node_exporter/node_exporter.pid
+LOG_FILE=/var/log/node_exporter
 
-[ -e /etc/sysconfig/prometheus ] && . /etc/sysconfig/prometheus
+[ -e /etc/sysconfig/node_exporter ] && . /etc/sysconfig/node_exporter
 
 export GOMAXPROCS=${GOMAXPROCS:-2}
 
 #
-# Create the /var/run/prometheus directory, which can live on a tmpfs
+# Create the /var/run/node_exporter directory, which can live on a tmpfs
 # filesystem and be destroyed between reboots.
 #
 mkrundir() {
-        [ ! -d /var/run/prometheus ] && mkdir -p /var/run/prometheus
-        chown <%= scope.lookupvar('prometheus::user') %> /var/run/prometheus
+        [ ! -d /var/run/node_exporter ] && mkdir -p /var/run/node_exporter
+        chown <%= scope.lookupvar('prometheus::node_exporter::user') %> /var/run/node_exporter
 }
 
 #
@@ -39,7 +38,7 @@ mkpidfile() {
         # Create PID file if it didn't exist
         mkrundir
         [ ! -f $PID_FILE ] && pidofproc $DAEMON > $PID_FILE
-        chown <%= scope.lookupvar('prometheus::user') %> /var/run/prometheus
+        chown <%= scope.lookupvar('prometheus::node_exporter::user') %> /var/run/node_exporter
         if [ $? -ne 0 ] ; then
             rm $PID_FILE
             KILLPROC_OPT=""
@@ -47,25 +46,25 @@ mkpidfile() {
 }
 
 start() {
-        echo -n "Starting prometheus: "
+        echo -n "Starting prometheus node exporter: "
         mkrundir
         [ -f $PID_FILE ] && rm $PID_FILE
-        daemon --user=<%= scope.lookupvar('prometheus::user') %> \
+        daemon --user=<%= scope.lookupvar('prometheus::node_exporter::user') %> \
             --pidfile="$PID_FILE" \
-            "$DAEMON" -log.format logger:stdout -config.file="$CONFIG" <%= scope.lookupvar('prometheus::extra_options') %> >> "$LOG_FILE" &
+            "$DAEMON" -collectors.enabled=<%= scope.lookupvar('prometheus::node_exporter::collectors').join(',') %> <%= scope.lookupvar('prometheus::node_exporter::extra_options') %> >> "$LOG_FILE" &
         retcode=$?
         mkpidfile
-        touch /var/lock/subsys/prometheus
+        touch /var/lock/subsys/node_exporter
         return $retcode
 }
 
 stop() {
         DELAY=5 # seconds maximum to wait for a leave
 
-        echo -n "Shutting down prometheus: "
+        echo -n "Shutting down prometheus node_exporter: "
         mkpidfile
 
-        prometheus_pid=$(cat $PID_FILE)
+        node_exporter_pid=$(cat $PID_FILE)
         killproc $KILLPROC_OPT $DAEMON -INT
         retcode=$?
 
@@ -73,8 +72,8 @@ stop() {
         # early if we can.  If not, escalate to harsher signals.
         try=0
         while [ $try -lt $DELAY ]; do
-        if ! checkpid $prometheus_pid ; then
-          rm -f /var/lock/subsys/prometheus
+        if ! checkpid $node_exporter_pid ; then
+          rm -f /var/lock/subsys/node_exporter
           return $retcode
         fi
         sleep 1
@@ -90,7 +89,7 @@ stop() {
         killproc $KILLPROC_OPT $DAEMON
         retcode=$?
 
-        rm -f /var/lock/subsys/prometheus $PID_FILE
+        rm -f /var/lock/subsys/node_exporter $PID_FILE
         return $retcode
 }
 
@@ -113,10 +112,10 @@ case "$1" in
         killproc $KILLPROC_OPT $DAEMON -HUP
         ;;
     condrestart)
-        [ -f /var/lock/subsys/prometheus ] && restart || :
+        [ -f /var/lock/subsys/node_exporter ] && restart || :
         ;;
     *)
-        echo "Usage: prometheus {start|stop|status|reload|restart}"
+        echo "Usage: node_exporter {start|stop|status|reload|restart}"
         exit 1
         ;;
 esac
