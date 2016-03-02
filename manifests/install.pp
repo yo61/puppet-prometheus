@@ -5,8 +5,8 @@
 # The package method needs specific yum or apt repo settings which are not made yet by the module
 class prometheus::install
 {
-   if $::prometheus::localstorage {
-    file { "$::prometheus::localstorage":
+  if $::prometheus::localstorage {
+    file { $::prometheus::localstorage:
       ensure => 'directory',
       owner  => $::prometheus::user,
       group  =>  $::prometheus::group,
@@ -23,7 +23,7 @@ class prometheus::install
         ensure => directory,
       } ->
       staging::extract { "prometheus-${prometheus::version}.${prometheus::download_extension}":
-        target  => "${::staging::path}",
+        target  => $::staging::path,
         creates => "${::staging::path}/prometheus-${prometheus::version}.${prometheus::os}-${prometheus::arch}/prometheus",
       } ->
       file {
@@ -36,8 +36,8 @@ class prometheus::install
           notify => $::prometheus::notify_service,
           target => "${::staging::path}/prometheus-${prometheus::version}.${prometheus::os}-${prometheus::arch}/prometheus";
       }
-     }
-     'package': {
+    }
+    'package': {
       package { $::prometheus::package_name:
         ensure => $::prometheus::package_ensure,
       }
@@ -45,13 +45,13 @@ class prometheus::install
         User[$::prometheus::user] -> Package[$::prometheus::package_name]
       }
     }
-     'none': {}
+    'none': {}
     default: {
       fail("The provided install method ${::prometheus::install_method} is invalid")
     }
   }
-   if $::prometheus::manage_user {
-    ensure_resource('user', [ "$::prometheus::user" ], {
+  if $::prometheus::manage_user {
+    ensure_resource('user', [ $::prometheus::user ], {
       ensure => 'present',
       system => true,
       groups => $::prometheus::extra_groups,
@@ -62,7 +62,7 @@ class prometheus::install
     }
   }
   if $::prometheus::manage_group {
-    ensure_resource('group', [ "$::prometheus::group" ],{
+    ensure_resource('group', [ $::prometheus::group ],{
       ensure => 'present',
       system => true,
     })

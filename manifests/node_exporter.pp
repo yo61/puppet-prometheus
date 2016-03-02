@@ -117,8 +117,8 @@ class prometheus::node_exporter (
   ->
   class { '::prometheus::node_exporter::install': } ->
   class { '::prometheus::node_exporter::config':
-    purge                => $purge_config_dir,
-    notify               => $notify_service,
+    purge  => $purge_config_dir,
+    notify => $notify_service,
   } ->
   class { '::prometheus::node_exporter::run_service': } ->
   anchor {'node_exporter_last': }

@@ -1,7 +1,7 @@
 # puppet-prometheus
-[![Puppet Forge](https://img.shields.io/puppetforge/e/brutus333/prometheus.svg)](https://forge.puppetlabs.com/brutus333/prometheus)
-[![Puppet Forge](https://img.shields.io/puppetforge/v/brutus333/prometheus.svg)](https://forge.puppetlabs.com/brutus333/prometheus)
-[![Puppet Forge](https://img.shields.io/puppetforge/f/brutus333/prometheus.svg)](https://forge.puppetlabs.com/brutus333/prometheus)
+[![Puppet Forge](https://img.shields.io/puppetforge/e/brutus777/prometheus.svg)](https://forge.puppetlabs.com/brutus777/prometheus)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/brutus777/prometheus.svg)](https://forge.puppetlabs.com/brutus777/prometheus)
+[![Puppet Forge](https://img.shields.io/puppetforge/f/brutus777/prometheus.svg)](https://forge.puppetlabs.com/brutus777/prometheus)
 
 ## Compatibility
 

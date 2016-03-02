@@ -115,7 +115,7 @@ class prometheus (
   $package_ensure       = $::prometheus::params::package_ensure,
   $config_dir           = $::prometheus::params::config_dir,
   $localstorage         = $::prometheus::params::localstorage,
-  $extra_options        = "-storage.local.path=$::prometheus::params::localstorage",
+  $extra_options        = "-storage.local.path=${::prometheus::params::localstorage}",
   $config_hash          = {},
   $config_defaults      = {},
   $config_mode          = $::prometheus::params::config_mode,
@@ -151,11 +151,11 @@ class prometheus (
   ->
   class { '::prometheus::install': } ->
   class { '::prometheus::config':
-    global_config   => $global_config,
-    rule_files          => $rule_files,
+    global_config  => $global_config,
+    rule_files     => $rule_files,
     scrape_configs => $scrape_configs,
-    purge                => $purge_config_dir,
-    notify                => $notify_service,
+    purge          => $purge_config_dir,
+    notify         => $notify_service,
   } ->
   class { '::prometheus::run_service': } ->
   anchor {'prometheus_last': }

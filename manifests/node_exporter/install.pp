@@ -10,25 +10,25 @@ class prometheus::node_exporter::install
       include staging
       $staging_file = "node_exporter-${prometheus::node_exporter::version}.${prometheus::node_exporter::download_extension}"
       $binary = "${::staging::path}/node_exporter"
-      staging::file { "${staging_file}":
+      staging::file { $staging_file:
         source => $prometheus::node_exporter::real_download_url,
       } ->
-      staging::extract { "${staging_file}":
-        target  => "${::staging::path}",
-        creates => "${binary}",
+      staging::extract { $staging_file:
+        target  => $::staging::path,
+        creates => $binary,
       } ->
       file {
-        "${binary}":
+        $binary:
           owner => 'root',
           group => 0, # 0 instead of root because OS X uses "wheel".
           mode  => '0555';
         "${::prometheus::node_exporter::bin_dir}/node_exporter":
           ensure => link,
           notify => $::prometheus::node_exporter::notify_service,
-          target => "${binary}",
+          target => $binary,
       }
-     }
-     'package': {
+    }
+    'package': {
       package { $::prometheus::node_exporter::package_name:
         ensure => $::prometheus::node_exporter::package_ensure,
       }
@@ -36,13 +36,13 @@ class prometheus::node_exporter::install
         User[$::prometheus::node_exporter::user] -> Package[$::prometheus::node_exporter::package_name]
       }
     }
-     'none': {}
+    'none': {}
     default: {
       fail("The provided install method ${::prometheus::install_method} is invalid")
     }
   }
-   if $::prometheus::node_exporter::manage_user {
-    ensure_resource('user', [ "$::prometheus::node_exporter::user" ], {
+  if $::prometheus::node_exporter::manage_user {
+    ensure_resource('user', [ $::prometheus::node_exporter::user ], {
       ensure => 'present',
       system => true,
       groups => $::prometheus::node_exporter::extra_groups,
@@ -53,7 +53,7 @@ class prometheus::node_exporter::install
     }
   }
   if $::prometheus::node_exporter::manage_group {
-    ensure_resource('group', [ "$::prometheus::node_exporter::group" ], {
+    ensure_resource('group', [ $::prometheus::node_exporter::group ], {
       ensure => 'present',
       system => true,
     })
