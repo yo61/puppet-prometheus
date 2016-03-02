@@ -6,8 +6,8 @@ After=basic.target network.target
 [Service]
 User=<%= scope.lookupvar('prometheus::node_exporter::user') %>
 Group=<%= scope.lookupvar('prometheus::node_exporter::group') %>
-ExecStart=<%= scope.lookupvar('prometheus::node_exporter::bin_dir') %>/prometheus agent \
-  -collectors.enabled=<%= scope.lookupvar('prometheus::node_exporter::collectors').join(',') %> <%= scope.lookupvar('prometheus::node_exporter:::extra_options') %>
+ExecStart=<%= scope.lookupvar('prometheus::node_exporter::bin_dir') %>/node_exporter \
+  -collectors.enabled=<%= scope.lookupvar('prometheus::node_exporter::collectors').join(',') %> <%= scope.lookupvar('prometheus::node_exporter::extra_options') %>
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure
