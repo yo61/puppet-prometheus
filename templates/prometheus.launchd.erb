@@ -19,7 +19,7 @@
             <string>-config.file=</string>
             <string><%= scope.lookupvar('prometheus::config_dir')+'/prometheus.yaml' %></string>
             <string>-storage.local.path=</string>
-            <string><%= scope.lookupvar('prometheus::params::localstorage')%></string>
+            <string><%= scope.lookupvar('prometheus::localstorage')%></string>
 <% require 'shellwords' %>
 <% for extra_option in Shellwords.split(scope.lookupvar('prometheus::extra_options')) %>
             <string><%= extra_option %></string>

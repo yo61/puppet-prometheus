@@ -8,7 +8,7 @@ User=<%= scope.lookupvar('prometheus::user') %>
 Group=<%= scope.lookupvar('prometheus::group') %>
 ExecStart=<%= scope.lookupvar('prometheus::bin_dir') %>/prometheus \
   -config.file=<%= scope.lookupvar('prometheus::config_dir')+'/prometheus.yaml' %>\
-  -storage.local.path=<%= scope.lookupvar('prometheus::params::localstorage')%> <%= scope.lookupvar('prometheus::extra_options') %>
+  -storage.local.path=<%= scope.lookupvar('prometheus::localstorage')%> <%= scope.lookupvar('prometheus::extra_options') %>
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure

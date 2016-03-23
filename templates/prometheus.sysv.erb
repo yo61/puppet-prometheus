@@ -53,7 +53,7 @@ start() {
         daemon --user=<%= scope.lookupvar('prometheus::user') %> \
             --pidfile="$PID_FILE" \
             "$DAEMON" -log.format logger:stdout -config.file="$CONFIG" \
-            -storage.local.path=<%= scope.lookupvar('prometheus::params::localstorage')%> \
+            -storage.local.path=<%= scope.lookupvar('prometheus::localstorage')%> \
             <%= scope.lookupvar('prometheus::extra_options') %> >> "$LOG_FILE" &
         retcode=$?
         mkpidfile
