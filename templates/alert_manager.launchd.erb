@@ -17,7 +17,9 @@
             <string><%= scope.lookupvar('prometheus::alert_manager::bin_dir') %>/prometheus</string>
             <string>agent</string>
             <string>-config.file=</string>
-            <string><%= scope.lookupvar('prometheus::alert_manager::config_file').join(',') %></string>
+            <string><%= scope.lookupvar('prometheus::alert_manager::config_file') %></string>
+            <string>-storage.path=</string>
+            <string><%= scope.lookupvar('prometheus::alert_manager::storage_path') %></string>
 <% require 'shellwords' %>
 <% for extra_option in Shellwords.split(scope.lookupvar('prometheus::alert_manager::extra_options')) %>
             <string><%= extra_option %></string>

@@ -7,7 +7,8 @@ After=basic.target network.target
 User=<%= scope.lookupvar('prometheus::alert_manager::user') %>
 Group=<%= scope.lookupvar('prometheus::alert_manager::group') %>
 ExecStart=<%= scope.lookupvar('prometheus::alert_manager::bin_dir') %>/alert_manager \
-  -config.file=<%= scope.lookupvar('prometheus::alert_manager::config_file').join(',') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %>
+  -config.file=<%= scope.lookupvar('prometheus::alert_manager::config_file') %> \
+  -storage.path=<%= scope.lookupvar('prometheus::alert_manager::storage_path') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %>
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure

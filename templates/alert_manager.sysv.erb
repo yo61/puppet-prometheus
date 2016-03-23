@@ -51,7 +51,7 @@ start() {
         [ -f $PID_FILE ] && rm $PID_FILE
         daemon --user=<%= scope.lookupvar('prometheus::alert_manager::user') %> \
             --pidfile="$PID_FILE" \
-            "$DAEMON" -config.file=<%= scope.lookupvar('prometheus::alert_manager::config_file').join(',') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %> >> "$LOG_FILE" &
+            "$DAEMON" -config.file=<%= scope.lookupvar('prometheus::alert_manager::config_file') %> -storage.path=<%= scope.lookupvar('prometheus::alert_manager::storage_path') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %> >> "$LOG_FILE" &
         retcode=$?
         mkpidfile
         touch /var/lock/subsys/alert_manager

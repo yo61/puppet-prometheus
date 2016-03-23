@@ -5,11 +5,20 @@
 # The package method needs specific yum or apt repo settings which are not made yet by the module
 class prometheus::alert_manager::install
 {
+  if $::prometheus::alert_manager::storage_path
+  { 
+    file { $::prometheus::alert_manager::storage_path:
+      ensure => 'directory',
+      owner  => $::prometheus::user,
+      group  =>  $::prometheus::group,
+      mode   => '0755',
+    }
+  }
   case $::prometheus::alert_manager::install_method {
     'url': {
       include staging
       $staging_file = "alert_manager-${prometheus::alert_manager::version}.${prometheus::alert_manager::download_extension}"
-      $binary = "${::staging::path}/alert_manager"
+      $binary = "${::staging::path}/alertmanager-${::prometheus::alert_manager::version}.${::prometheus::os}-${::prometheus::arch}"
       staging::file { $staging_file:
         source => $prometheus::alert_manager::real_download_url,
       } ->

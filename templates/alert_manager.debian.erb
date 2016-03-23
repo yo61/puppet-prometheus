@@ -18,7 +18,7 @@ DESC="Prometheus alert manager"
 NAME=alert_manager
 DAEMON=<%= scope.lookupvar('prometheus::alert_manager::bin_dir') %>/$NAME
 PIDFILE=/var/run/$NAME/$NAME.pid
-DAEMON_ARGS=" -config.file=<%= scope.lookupvar('prometheus::alert_manager::config_file').join(',') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %>"
+DAEMON_ARGS=" -config.file=<%= scope.lookupvar('prometheus::alert_manager::config_file') %> -storage.path=<%= scope.lookupvar('prometheus::alert_manager::storage_path') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %>"
 USER=<%= scope.lookupvar('prometheus::alert_manager::user') %>
 SCRIPTNAME=/etc/init.d/$NAME
 

@@ -35,7 +35,7 @@ case "$1" in
         echo -n "Starting Prometheus alert manager"
         ## Start daemon with startproc(8). If this fails
         ## the return value is set appropriately by startproc.
-        startproc $ALERT_MANAGER_BIN -config.file=<%= scope.lookupvar('prometheus::alert_manager::config_file').join(',') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %> >> "$LOG_FILE"
+        startproc $ALERT_MANAGER_BIN -config.file=<%= scope.lookupvar('prometheus::alert_manager::config_file') %> -storage.path=<%= scope.lookupvar('prometheus::alert_manager::storage_path') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %> >> "$LOG_FILE"
 
         # Remember status and be verbose
         rc_status -v

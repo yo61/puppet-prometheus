@@ -22,14 +22,14 @@ class prometheus::params {
   $alert_manager_config_file = "${config_dir}/alertmanager.yaml"
   $alert_manager_global = { 'smtp_smarthost' =>'localhost:25', 'smtp_from'=>'alertmanager@localhost' }
   $alert_manager_templates = [ "${config_dir}/*.tmpl" ]
-  $alert_manager_route = { 'group_by'               =>  [ 'alertname', 'cluster', 'service' ], 'group_wait'=> '30s', 'group_interval'=> '5m', 'repeat_interval'=> '3h', 'receiver'=> 'root@localhost' }
+  $alert_manager_route = { 'group_by'               =>  [ 'alertname', 'cluster', 'service' ], 'group_wait'=> '30s', 'group_interval'=> '5m', 'repeat_interval'=> '3h', 'receiver'=> 'Admin' }
   $alert_manager_receivers = [ { 'name'             => 'Admin', 'email_configs'=> [ { 'to'=> 'root@localhost' }] }]
   $alert_manager_inhibit_rules = [ { 'source_match' => { 'severity'=> 'critical' },'target_match'=> { 'severity'=>'warning'},'equal'=>['alertname','cluster','service']}]
-  $alert_manager_storagepath='/var/lib/alertmanager'
+  $alert_manager_storage_path='/var/lib/alertmanager'
   $alert_manager_version = '0.1.0'
   $alert_manager_download_extension = 'tar.gz'
   $alert_manager_package_ensure = 'latest'
-  $alert_manager_package_name = 'alert_manager'
+  $alert_manager_package_name = 'alertmanager'
   $config_mode = '0660'
   $global_config = { 'scrape_interval'=> '15s', 'evaluation_interval'=> '15s', 'external_labels'=> { 'monitor'=>'master'}}
   $rule_files = [ "${config_dir}/alert.rules" ]
