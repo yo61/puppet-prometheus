@@ -111,7 +111,11 @@ class prometheus::alert_manager (
   validate_bool($manage_user)
   validate_bool($manage_service)
   validate_bool($restart_on_change)
-  validate_array($collectors)
+  validate_array($templates)
+  validate_array($receivers)
+  validate_array($inhibit_rules)
+  validate_hash($global)
+  validate_hash($route)
   
   $notify_service = $restart_on_change ? {
     true    => Class['::prometheus::alert_manager::run_service'],
