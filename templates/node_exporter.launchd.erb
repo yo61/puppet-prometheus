@@ -19,7 +19,7 @@
             <string>-collectors.enabled=</string>
             <string><%= scope.lookupvar('prometheus::node_exporter::collectors').join(',') %></string>
 <% require 'shellwords' %>
-<% for extra_option in Shellwords.split(scope.lookupvar('prometheus::extra_options')) %>
+<% for extra_option in Shellwords.split(scope.lookupvar('prometheus::node_exporter::extra_options')) %>
             <string><%= extra_option %></string>
 <% end %>
         </array>

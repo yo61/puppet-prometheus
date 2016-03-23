@@ -18,11 +18,18 @@ class prometheus::params {
   $node_exporter_collectors = ['diskstats','filesystem','loadavg','meminfo','netdev','stat,time']
   $node_exporter_package_ensure = 'latest'
   $node_exporter_package_name = 'node_exporter'
-  $alertmanager_url_base = 'https://github.com/prometheus/alertmanager/releases'
-  $alertmanager_configpath = '/etc/prometheus/alertmanager.yaml'
+  $alertmanager_download_url_base = 'https://github.com/prometheus/alertmanager/releases'
+  $alertmanager_config_file = "${config_dir}/alertmanager.yaml"
+  $alertmanager_global = { 'smtp_smarthost' =>'localhost:25', 'smtp_from'=>'alertmanager@localhost' }
+  $alertmanager_templates = [ "${config_dir}/*.tmpl" ]
+  $alertmanager_route = { 'group_by'               =>  [ 'alertname', 'cluster', 'service' ], 'group_wait'=> '30s', 'group_interval'=> '5m', 'repeat_interval'=> '3h', 'receiver'=> 'root@localhost' }
+  $alertmanager_receivers = [ { 'name'             => 'Admin', 'email_configs'=> [ { 'to'=> 'root@localhost' }] }]
+  $alertmanager_inhibit_rules = [ { 'source_match' => { 'severity'=> 'critical' },'target_match'=> { 'severity'=>'warning'},'equal'=>['alertname','cluster','service']}]
   $alertmanager_storagepath='/var/lib/alertmanager'
   $alertmanager_version = '0.1.0'
   $alertmanager_download_extension = 'tar.gz'
+  $alert_manager_package_ensure = 'latest'
+  $alert_manager_package_name = 'alert_manager'
   $config_mode = '0660'
   $global_config = { 'scrape_interval'=> '15s', 'evaluation_interval'=> '15s', 'external_labels'=> { 'monitor'=>'master'}}
   $rule_files = [ "${config_dir}/alert.rules" ]
