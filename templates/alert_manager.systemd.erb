@@ -11,7 +11,7 @@ ExecStart=<%= scope.lookupvar('prometheus::alert_manager::bin_dir') %>/alert_man
   -storage.path=<%= scope.lookupvar('prometheus::alert_manager::storage_path') %> <%= scope.lookupvar('prometheus::alert_manager::extra_options') %>
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
-Restart=on-failure
+Restart=always
 RestartSec=42s
 
 [Install]

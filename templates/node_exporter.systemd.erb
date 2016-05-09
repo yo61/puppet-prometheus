@@ -10,7 +10,7 @@ ExecStart=<%= scope.lookupvar('prometheus::node_exporter::bin_dir') %>/node_expo
   -collectors.enabled=<%= scope.lookupvar('prometheus::node_exporter::collectors').join(',') %> <%= scope.lookupvar('prometheus::node_exporter::extra_options') %>
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
-Restart=on-failure
+Restart=always
 RestartSec=42s
 
 [Install]
