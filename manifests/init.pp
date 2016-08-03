@@ -129,7 +129,13 @@ class prometheus (
   $rule_files           = $::prometheus::params::rule_files,
   $scrape_configs       = $::prometheus::params::scrape_configs,
 ) inherits prometheus::params {
-  $real_download_url    = pick($download_url, "${download_url_base}/download/${version}/${package_name}-${version}.${os}-${arch}.${download_extension}")
+  if( versioncmp($::prometheus::version, '1.0.0') == -1 ){
+    $real_download_url    = pick($download_url,
+      "${download_url_base}/download/${version}/${package_name}-${version}.${os}-${arch}.${download_extension}")
+  } else {
+    $real_download_url    = pick($download_url,
+      "${download_url_base}/download/v${version}/${package_name}-${version}.${os}-${arch}.${download_extension}")
+  }
   validate_bool($purge_config_dir)
   validate_bool($manage_user)
   validate_bool($manage_service)
@@ -139,10 +145,9 @@ class prometheus (
   validate_hash($global_config)
   validate_array($rule_files)
   validate_array($scrape_configs)
-  
+
   $config_hash_real = deep_merge($config_defaults, $config_hash)
   validate_hash($config_hash_real)
-  
   $notify_service = $restart_on_change ? {
     true    => Class['::prometheus::run_service'],
     default => undef,

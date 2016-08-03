@@ -11,7 +11,7 @@ class prometheus::params {
   $package_ensure = 'latest'
   $package_name = 'prometheus'
   $download_url_base = 'https://github.com/prometheus/prometheus/releases'
-  $version = '0.16.2'
+  $version = '1.0.1'
   $download_extension = 'tar.gz'
   $node_exporter_download_url_base = 'https://github.com/prometheus/node_exporter/releases'
   $node_exporter_version = '0.12.0'
@@ -28,14 +28,14 @@ class prometheus::params {
   $alert_manager_receivers = [ { 'name'             => 'Admin', 'email_configs'=> [ { 'to'=> 'root@localhost' }] }]
   $alert_manager_inhibit_rules = [ { 'source_match' => { 'severity'=> 'critical' },'target_match'=> { 'severity'=>'warning'},'equal'=>['alertname','cluster','service']}]
   $alert_manager_storage_path='/var/lib/alertmanager'
-  $alert_manager_version = '0.1.0'
+  $alert_manager_version = '0.3.0'
   $alert_manager_download_extension = 'tar.gz'
   $alert_manager_package_ensure = 'latest'
   $alert_manager_package_name = 'alertmanager'
   $config_mode = '0660'
   $global_config = { 'scrape_interval'=> '15s', 'evaluation_interval'=> '15s', 'external_labels'=> { 'monitor'=>'master'}}
   $rule_files = [ "${config_dir}/alert.rules" ]
-  $scrape_configs = [ { 'job_name'=> 'prometheus', 'scrape_interval'=> '10s', 'scrape_timeout'=> '10s', 'target_groups'=> [ { 'targets'=> [ 'localhost:9090' ], 'labels'=> { 'alias'=> 'Prometheus'} } ] } ]
+  $scrape_configs = [ { 'job_name'=> 'prometheus', 'scrape_interval'=> '10s', 'scrape_timeout'=> '10s', 'static_configs'=> [ { 'targets'=> [ 'localhost:9090' ], 'labels'=> { 'alias'=> 'Prometheus'} } ] } ]
   case $::architecture {
     'x86_64', 'amd64': { $arch = 'amd64' }
     'i386':            { $arch = '386'   }

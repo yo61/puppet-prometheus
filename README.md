@@ -9,6 +9,11 @@
 | ----------------    | ----------------------------------- |
 | >= 0.16.2           | latest                              |
 
+
+## Background
+
+This module automates the install and configuration of Prometheus monitoring tool: [Prometheus web site](https://prometheus.io/docs/introduction/overview/)
+
 ### What This Module Affects
 
 * Installs the prometheus daemon, alertmanager or exporters(via url or package)
@@ -20,13 +25,24 @@
 ## Usage
 
 To set up a prometheus daemon:
-On the server:
+On the server (for prometheus version < 1.0.0):
 
 ```puppet
 class { '::prometheus':
   global_config  => { 'scrape_interval'=> '15s', 'evaluation_interval'=> '15s', 'external_labels'=> { 'monitor'=>'master'}},
   rule_files     => [ "/etc/prometheus/alert.rules" ],
   scrape_configs => [ { 'job_name'=> 'prometheus', 'scrape_interval'=> '10s', 'scrape_timeout'=> '10s', 'target_groups'=> [ { 'targets'=> [ 'localhost:9090' ], 'labels'=> { 'alias'=> 'Prometheus'} } ] } ]
+}
+```
+
+On the server (for prometheus version >= 1.0.0):
+
+```puppet
+class { 'prometheus':
+    version => '1.0.0',
+    scrape_configs => [ {'job_name'=>'prometheus','scrape_interval'=> '30s','scrape_timeout'=>'30s','static_configs'=> [{'targets'=>['localhost:9090'], 'labels'=> { 'alias'=>'Prometheus'}}]}],
+    extra_options => '-alertmanager.url http://localhost:9093 -web.console.templates=/opt/staging/prometheus-1.0.0.linux-amd64/consoles -web.console.libraries=/opt/staging/prometheus-1.0.0.linux-amd64/console_libraries',
+    localstorage => '/prometheus/prometheus',
 }
 ```
 
@@ -43,6 +59,16 @@ class { '::prometheus::node_exporter':
 }
 ```
 
+or:
+
+```puppet
+class { 'prometheus::node_exporter':
+    version => '0.12.0',
+    collectors => ['diskstats','filesystem','loadavg','meminfo','logind','netdev','netstat','stat','time','interrupts','ntp','tcpstat'],
+    extra_options => '-collector.ntp.server ntp1.orange.intra',
+}
+```
+
 or simply:
 ```puppet
 include ::prometheus::node_exporter
@@ -51,6 +77,8 @@ include ::prometheus::node_exporter
 For more information regarding class parameters please take a look at class docstring.
 
 ## Limitations/Known issues
+
+Do not use version 1.0.0 of Prometheus: https://groups.google.com/forum/#!topic/prometheus-developers/vuSIxxUDff8 ; it does break the compatibility with thus module!
 
 Even if the module has templates for several linux distributions, only RH family distributions were tested.
 
