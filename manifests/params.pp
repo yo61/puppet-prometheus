@@ -14,6 +14,12 @@ class prometheus::params {
   $download_url_base = 'https://github.com/prometheus/prometheus/releases'
   $version = '1.0.1'
   $download_extension = 'tar.gz'
+  $jmx_exporter_download_url_base = 'https://github.com/prometheus/jmx_exporter/releases'
+  $jmx_exporter_version = 'parent-0.6'
+  $jmx_exporter_download_extension = 'tar.gz'
+  $jmx_exporter_package_ensure = 'latest'
+  $jmx_exporter_package_name = 'node_exporter'
+  $jmx_exporter_extra_groups = []
   $node_exporter_download_url_base = 'https://github.com/prometheus/node_exporter/releases'
   $node_exporter_version = '0.12.0'
   $node_exporter_download_extension = 'tar.gz'
