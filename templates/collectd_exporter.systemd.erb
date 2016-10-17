@@ -1,0 +1,17 @@
+[Unit]
+Description=A server that accepts collectd stats via HTTP POST and exports them via HTTP for Prometheus consumption
+Wants=basic.target
+After=basic.target network.target
+
+[Service]
+User=<%= scope.lookupvar('prometheus::collectd_exporter::user') %>
+Group=<%= scope.lookupvar('prometheus::collectd_exporter::group') %>
+ExecStart=<%= scope.lookupvar('prometheus::collectd_exporter::bin_dir') %>/collectd_exporter \
+  <%= scope.lookupvar('prometheus::collectd_exporter::extra_options') %>
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=always
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
