@@ -10,12 +10,7 @@ class prometheus::collectd_exporter::install
     'url': {
       include staging
       $staging_file = "collectd_exporter-${prometheus::collectd_exporter::version}.${prometheus::collectd_exporter::download_extension}"
-      # FIXME: is this version comp required for collectd_exporter?
-      if( versioncmp($::prometheus::collectd_exporter::version, '0.12.0') == -1 ){
-        $binary = "${::staging::path}/collectd_exporter"
-      } else {
-          $binary = "${::staging::path}/collectd_exporter-${::prometheus::collectd_exporter::version}.${::prometheus::collectd_exporter::os}-${::prometheus::collectd_exporter::arch}/collectd_exporter"
-      }
+      $binary = "${::staging::path}/collectd_exporter-${::prometheus::collectd_exporter::version}.${::prometheus::collectd_exporter::os}-${::prometheus::collectd_exporter::arch}/collectd_exporter"
       staging::file { $staging_file:
         source => $prometheus::collectd_exporter::real_download_url,
       } ->
