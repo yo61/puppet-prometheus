@@ -3,7 +3,7 @@
 # This class is meant to be called from prometheus::jmx_exporter
 # It ensure the jmx_exporter service is running
 #
-class prometheus::node_exporter::run_service {
+class prometheus::jmx_exporter::run_service {
 
   $init_selector = $prometheus::jmx_exporter::init_style ? {
     'launchd' => 'io.jmx_exporter.daemon',
