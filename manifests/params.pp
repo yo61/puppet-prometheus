@@ -14,7 +14,7 @@ class prometheus::params {
   $download_url_base = 'https://github.com/prometheus/prometheus/releases'
   $version = '1.0.1'
   $download_extension = 'tar.gz'
-  $jmx_exporter_download_url_base = 'https://github.com/prometheus/jmx_exporter/releases'
+  $jmx_exporter_download_url_base = 'https://github.com/prometheus/jmx_exporter/archive'
   $jmx_exporter_version = 'parent-0.6'
   $jmx_exporter_download_extension = 'tar.gz'
   $jmx_exporter_package_ensure = 'latest'
